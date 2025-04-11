@@ -9,7 +9,6 @@ import { uploadTrainingData } from "@/lib/api/upload";
 const Index = () => {
   const [heartRateFile, setHeartRateFile] = useState<File | null>(null);
   const [mantisFile, setMantisFile] = useState<File | null>(null);
-
   const handleHeartRateUpload = (file: File) => {
     setHeartRateFile(file);
   };
@@ -19,17 +18,31 @@ const Index = () => {
   };
 
   const handleAnalyze = async () => {
-    if (!heartRateFile || !mantisFile) {
-      toast.error("Please upload both heart rate and MANTIS data files");
+    if (!mantisFile) {
+      toast.error("Please upload the MANTIS CSV file");
       return;
     }
 
-    const { success, message } = await uploadTrainingData(
-      heartRateFile,
-      mantisFile
-    );
+    const formData = new FormData();
+    formData.append("mantisFile", mantisFile);
 
-    success ? toast.success(message) : toast.error(message);
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        toast.success("MANTIS session uploaded successfully");
+      } else {
+        toast.error(data.error || "Upload failed.");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Server error during upload.");
+    }
   };
 
   return (
@@ -68,7 +81,7 @@ const Index = () => {
             <Button
               className="bg-navy-700 hover:bg-navy-800 text-white px-8 py-6 text-lg"
               onClick={handleAnalyze}
-              disabled={!heartRateFile || !mantisFile}
+              disabled={!mantisFile}
             >
               Analyze Data
             </Button>
