@@ -4,6 +4,7 @@ import FileUploader from "@/components/FileUploader";
 import { Button } from "@/components/ui/button";
 import { Activity, Target } from "lucide-react";
 import { toast } from "sonner";
+import { uploadTrainingData } from "@/lib/api/upload";
 
 const Index = () => {
   const [heartRateFile, setHeartRateFile] = useState<File | null>(null);
@@ -17,14 +18,18 @@ const Index = () => {
     setMantisFile(file);
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!heartRateFile || !mantisFile) {
       toast.error("Please upload both heart rate and MANTIS data files");
       return;
     }
 
-    // In a real app, we would process the files here
-    toast.success("Analysis started! Results will be available soon.");
+    const { success, message } = await uploadTrainingData(
+      heartRateFile,
+      mantisFile
+    );
+
+    success ? toast.success(message) : toast.error(message);
   };
 
   return (
