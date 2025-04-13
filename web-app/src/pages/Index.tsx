@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Activity, Target } from "lucide-react";
 import { toast } from "sonner";
 import { uploadTrainingData } from "@/lib/api/upload";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const [heartRateFile, setHeartRateFile] = useState<File | null>(null);
   const [mantisFile, setMantisFile] = useState<File | null>(null);
+  const navigate = useNavigate();
+
   const handleHeartRateUpload = (file: File) => {
     setHeartRateFile(file);
   };
@@ -36,6 +39,7 @@ const Index = () => {
 
       if (res.ok) {
         toast.success("MANTIS session uploaded successfully");
+        navigate("/Dashboard");
       } else {
         toast.error(data.error || "Upload failed.");
       }
