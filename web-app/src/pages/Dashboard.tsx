@@ -16,6 +16,7 @@ const Dashboard = () => {
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
+  
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />

@@ -30,10 +30,13 @@ const Index = () => {
     formData.append("mantisFile", mantisFile);
 
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        "https://reid-lab2-backend.onrender.com/api/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await res.json();
 

@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
-      "/api": "http://localhost:3001", // backend server
+      "/api": "https://reid-lab2-backend.onrender.com", // backend server
     },
   },
   

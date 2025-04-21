@@ -7,6 +7,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+
 const DayOfWeekPerformanceChart = () => {
   // Mock data - in a real application this would come from processing the CSV files
   const data = [
@@ -18,6 +19,7 @@ const DayOfWeekPerformanceChart = () => {
     { day: "Sat", score: 76.8 },
     { day: "Sun", score: 74.5 },
   ];
+
   return (
     <div className="h-80 w-full">
       <ResponsiveContainer width="100%" height="100%">
