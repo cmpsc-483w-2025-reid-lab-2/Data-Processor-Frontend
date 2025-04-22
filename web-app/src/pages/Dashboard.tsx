@@ -5,18 +5,50 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DayOfWeekPerformanceChart from "@/components/DayOfWeekPerformanceChart";
 import HeartRateScoreCorrelationChart from "@/components/HeartRateScoreCorrelationChart";
 
+interface DayOfWeekData {
+  day: string;
+  score: number;
+}
+
+interface HeartRateData {
+  heartRate: string;
+  score: number;
+}
+
 const Dashboard = () => {
-  // In a real app, this data would come from processing the uploaded CSV files
-  // For now, we'll use mock data
   const [isLoading, setIsLoading] = useState(true);
+  const [dayOfWeekData, setDayOfWeekData] = useState<DayOfWeekData[]>([]);
+  const [heartRateData, setHeartRateData] = useState<HeartRateData[]>([]);
+
   useEffect(() => {
-    // Simulate data processing delay
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
+    const fetchChartData = async () => {
+      try {
+        const [dowResponse, hrResponse] = await Promise.all([
+          fetch('/api/performance-by-day'),
+          fetch('/api/heart-rate-correlation')
+        ]);
+
+        const dowData = await dowResponse.json();
+        const hrData = await hrResponse.json();
+
+        setDayOfWeekData(dowData);
+        setHeartRateData(hrData);
+        setIsLoading(false);
+
+      } catch (error) {
+        console.error('Error fetching chart data:', error);
+        setIsLoading(false);
+        // Optionally handle error state
+      }
+    };
+
+    fetchChartData();
+
   }, []);
-  
+
+
+
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -51,7 +83,7 @@ const Dashboard = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6">
-                      <DayOfWeekPerformanceChart />
+                      <DayOfWeekPerformanceChart data={dayOfWeekData}/>
                     </CardContent>
                   </Card>
                   <Card className="shadow-md">
@@ -61,7 +93,7 @@ const Dashboard = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pt-6">
-                      <HeartRateScoreCorrelationChart />
+                      <HeartRateScoreCorrelationChart data={heartRateData}/>
                     </CardContent>
                   </Card>
                 </div>
