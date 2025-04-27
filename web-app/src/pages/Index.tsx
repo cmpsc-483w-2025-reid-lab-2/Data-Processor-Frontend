@@ -30,10 +30,13 @@ const Index = () => {
     formData.append("mantisFile", mantisFile);
 
     try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        "https://reid-lab2-backend.onrender.com/api/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await res.json();
 
@@ -65,14 +68,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <FileUploader
-              title="Heart Rate Data"
-              description="Upload CSV files from smart watches and heart rate monitors"
-              icon={<Activity className="h-5 w-5 text-navy-700" />}
-              onFileUpload={handleHeartRateUpload}
-            />
-
+          <div className="grid md:grid-cols-1 gap-8 mb-12">
             <FileUploader
               title="MANTIS Data"
               description="Upload CSV files from the MANTIS accuracy tracking system"
